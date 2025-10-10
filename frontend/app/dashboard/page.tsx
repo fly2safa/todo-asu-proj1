@@ -1,12 +1,13 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useMemo } from "react";
 import { Task, Label } from "@/types";
 import { taskService } from "@/lib/tasks";
 import { labelService } from "@/lib/labels";
 import TaskList from "@/components/TaskList";
 import TaskFormModal from "@/components/TaskFormModal";
 import LabelManager from "@/components/LabelManager";
+import TaskFiltersPanel, { FilterOptions } from "@/components/TaskFiltersPanel";
 import { Plus, AlertCircle, Tag } from "lucide-react";
 
 export default function DashboardPage() {
@@ -17,6 +18,14 @@ export default function DashboardPage() {
   const [showTaskModal, setShowTaskModal] = useState(false);
   const [editingTask, setEditingTask] = useState<Task | undefined>();
   const [showLabelManager, setShowLabelManager] = useState(false);
+  const [filters, setFilters] = useState<FilterOptions>({
+    priority: 'all',
+    completed: 'all',
+    labelIds: [],
+    overdue: 'all',
+    sortBy: 'created_at',
+    sortOrder: 'desc',
+  });
 
   useEffect(() => {
     loadData();
@@ -75,6 +84,69 @@ export default function DashboardPage() {
     }
   };
 
+  // Filter and sort tasks
+  const filteredAndSortedTasks = useMemo(() => {
+    let filtered = [...tasks];
+
+    // Filter by priority
+    if (filters.priority !== 'all') {
+      filtered = filtered.filter((task) => task.priority === filters.priority);
+    }
+
+    // Filter by completion status
+    if (filters.completed === 'completed') {
+      filtered = filtered.filter((task) => task.completed);
+    } else if (filters.completed === 'incomplete') {
+      filtered = filtered.filter((task) => !task.completed);
+    }
+
+    // Filter by labels
+    if (filters.labelIds.length > 0) {
+      filtered = filtered.filter((task) =>
+        task.label_ids.some((labelId) => filters.labelIds.includes(labelId))
+      );
+    }
+
+    // Filter by overdue status
+    if (filters.overdue !== 'all') {
+      const now = new Date();
+      if (filters.overdue === 'overdue') {
+        filtered = filtered.filter((task) => {
+          if (!task.deadline || task.completed) return false;
+          return new Date(task.deadline) < now;
+        });
+      } else if (filters.overdue === 'not_overdue') {
+        filtered = filtered.filter((task) => {
+          if (!task.deadline) return true;
+          if (task.completed) return true;
+          return new Date(task.deadline) >= now;
+        });
+      }
+    }
+
+    // Sort tasks
+    filtered.sort((a, b) => {
+      let comparison = 0;
+
+      if (filters.sortBy === 'created_at') {
+        comparison = new Date(a.created_at).getTime() - new Date(b.created_at).getTime();
+      } else if (filters.sortBy === 'deadline') {
+        // Tasks without deadlines go to the end
+        if (!a.deadline && !b.deadline) comparison = 0;
+        else if (!a.deadline) comparison = 1;
+        else if (!b.deadline) comparison = -1;
+        else comparison = new Date(a.deadline).getTime() - new Date(b.deadline).getTime();
+      } else if (filters.sortBy === 'priority') {
+        const priorityOrder = { High: 3, Medium: 2, Low: 1 };
+        comparison = priorityOrder[a.priority] - priorityOrder[b.priority];
+      }
+
+      return filters.sortOrder === 'desc' ? -comparison : comparison;
+    });
+
+    return filtered;
+  }, [tasks, filters]);
+
   return (
     <div className="space-y-6">
       {/* Header */}
@@ -114,9 +186,18 @@ export default function DashboardPage() {
         </div>
       )}
 
+      {/* Filters Panel */}
+      <TaskFiltersPanel
+        labels={labels}
+        filters={filters}
+        onFiltersChange={setFilters}
+        taskCount={tasks.length}
+        filteredCount={filteredAndSortedTasks.length}
+      />
+
       {/* Task List */}
       <TaskList 
-        tasks={tasks} 
+        tasks={filteredAndSortedTasks} 
         labels={labels} 
         loading={loading}
         onTaskEdit={handleTaskEdit}
