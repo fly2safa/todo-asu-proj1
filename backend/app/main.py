@@ -5,6 +5,7 @@ from app.config import settings
 from app.database import db_manager
 from app.routers.auth import router as auth_router
 from app.routers.tasks import router as tasks_router
+from app.routers.labels import router as labels_router
 
 
 @asynccontextmanager
@@ -39,6 +40,7 @@ app.add_middleware(
 # Include routers
 app.include_router(auth_router)
 app.include_router(tasks_router)
+app.include_router(labels_router)
 
 
 @app.get("/")

@@ -72,9 +72,13 @@ The API will be available at:
 - `PATCH /api/tasks/{task_id}/complete` - Toggle task completion (protected)
 - `DELETE /api/tasks/{task_id}` - Delete a task (protected)
 
-### Coming Soon
+### Stage 4: Label Management Endpoints
 
-- Stage 4: Label management endpoints (`/api/labels/*`)
+- `POST /api/labels` - Create a new label (protected)
+- `GET /api/labels` - Get all user's labels (protected)
+- `GET /api/labels/{label_id}` - Get a specific label (protected)
+- `PUT /api/labels/{label_id}` - Update a label (protected)
+- `DELETE /api/labels/{label_id}` - Delete label and remove from tasks (protected)
 
 ## Project Structure
 
@@ -137,7 +141,7 @@ Use the interactive documentation at `/docs` to test endpoints:
 - [x] Protected route for user info
 - [x] Tested and committed
 
-## Stage 3 Completion Checklist
+## Stage 3 Completion ✅
 
 - [x] Task model and schema created
 - [x] Priority enum (High, Medium, Low)
@@ -146,7 +150,17 @@ Use the interactive documentation at `/docs` to test endpoints:
 - [x] Sorting by various fields
 - [x] Overdue detection
 - [x] Task ownership verification
-- [ ] Test all task endpoints
-- [ ] Verify filtering and sorting
-- [ ] Ready to commit Stage 3
+- [x] Tested and committed
+
+## Stage 4 Completion Checklist
+
+- [x] Label model and schema created
+- [x] Hex color validation
+- [x] Label CRUD endpoints
+- [x] Label ownership verification
+- [x] Unique label names per user
+- [x] Cascade delete (remove from tasks)
+- [ ] Test all label endpoints
+- [ ] Verify task-label integration
+- [ ] Ready to commit Stage 4
 
