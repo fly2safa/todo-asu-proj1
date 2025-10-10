@@ -50,14 +50,21 @@ The API will be available at:
 
 ## API Endpoints
 
-### Current Endpoints (Stage 1)
+### Stage 1: Core Endpoints
 
 - `GET /` - Root endpoint with API information
 - `GET /health` - Health check endpoint (verifies database connection)
 
+### Stage 2: Authentication Endpoints
+
+- `POST /api/auth/register` - Register a new user
+- `POST /api/auth/login` - Login and receive access/refresh tokens
+- `POST /api/auth/refresh` - Refresh access token using refresh token
+- `POST /api/auth/logout` - Logout and revoke refresh token
+- `GET /api/auth/me` - Get current authenticated user information (protected)
+
 ### Coming Soon
 
-- Stage 2: Authentication endpoints (`/api/auth/*`)
 - Stage 3: Task management endpoints (`/api/tasks/*`)
 - Stage 4: Label management endpoints (`/api/labels/*`)
 
@@ -98,7 +105,7 @@ Use the interactive documentation at `/docs` to test endpoints:
 4. Whitelist your IP address (or use 0.0.0.0/0 for development)
 5. Get your connection string and update `MONGODB_URI` in `.env`
 
-## Stage 1 Completion Checklist
+## Stage 1 Completion ✅
 
 - [x] Project structure created
 - [x] Dependencies defined in requirements.txt
@@ -107,7 +114,20 @@ Use the interactive documentation at `/docs` to test endpoints:
 - [x] FastAPI app with CORS configuration
 - [x] Health check endpoint
 - [x] Startup/shutdown lifecycle management
-- [ ] Test health check endpoint
-- [ ] Verify database connection
-- [ ] Ready to commit Stage 1
+- [x] Tested and committed
+
+## Stage 2 Completion Checklist
+
+- [x] User model and schema created
+- [x] Token model for refresh tokens
+- [x] Password hashing with bcrypt
+- [x] JWT token generation (access + refresh)
+- [x] User registration endpoint
+- [x] User login endpoint
+- [x] Token refresh endpoint
+- [x] Logout endpoint
+- [x] Protected route for user info
+- [ ] Test all authentication endpoints
+- [ ] Verify token-based authentication
+- [ ] Ready to commit Stage 2
 

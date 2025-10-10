@@ -14,8 +14,8 @@ class DatabaseManager:
     def connect(self):
         """Establish connection to MongoDB."""
         try:
-            # Check if we have a real MongoDB URI (not placeholder)
-            if "username:password" in settings.MONGODB_URI or "cluster.mongodb.net" not in settings.MONGODB_URI:
+            # Check if we have a placeholder MongoDB URI
+            if "username:password" in settings.MONGODB_URI:
                 print("WARNING: Using placeholder MongoDB URI. Please update .env with your actual MongoDB connection string.")
                 print("For now, the application will run without database connection for testing.")
                 return
