@@ -1,0 +1,14 @@
+# In todo-asu-proj1/.gitignore
+
+# Chat logs and sensitive information
+.chat_history.md
+chat_log.md
+.cursor_chat.md
+*.chat.md
+
+# Environment files (if not already there)
+.env
+backend/.env
+
+# Any other sensitive files
+.credentials
