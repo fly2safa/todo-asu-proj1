@@ -7,33 +7,37 @@ A modern, full-stack TODO application built with FastAPI (Python) backend and
  advanced filtering capabilities.
 
 ## Required Features (Core User Stories)
+   Following are the essential features that must be completed:
 
 ### User Management
-- **User Registration**: Create a new account with email, username, and password
-- **User Authentication**: Secure login/logout with JWT tokens
-- **Protected Routes**: Access control for authenticated users only
+- **As a user**, I want to sign up for an account, so I can have my own personal task list.
+- **As a user**, I want to log in, so I can access my tasks and manage my profile.
+- **As a user**, I want to securely log out, so my data is protected from others.
 
 ### Task Management
-- **Create Tasks**: Add new tasks with title, description, priority, and deadline
-- **View Tasks**: Display all tasks with filtering and sorting options
-- **Update Tasks**: Edit task details and mark as complete/incomplete
-- **Delete Tasks**: Remove tasks from your list
-- **Priority Levels**: Organize tasks by High, Medium, or Low priority
-- **Deadline Tracking**: Visual indicators for overdue tasks
-- **Required Task Fields**: Every task must include a title, an optional description,
-                            a priority level (e.g., High, Medium, Low) and a deadline (date)
-
+- **As a user**, I want to create a new task, so I can add things I need to do to my list.
+- **As a user**, I want to view all my tasks, so I can see everything I need to get done.
+- **As a user**, I want to update a task's details, so I can change its title, description, or status (e.g., incomplete to complete).
+- **As a user**, I want to delete a task, so I can remove completed or irrelevant items from my list.
+- **Required Task Fields**: Every task must include a title, an optional description, 
+                            a priority level (e.g., High, Medium, Low), and a deadline (date).
 
 ### Labeling System
-- **Create Labels**: Add custom labels with names and colors
-- **Assign Labels**: Tag tasks with multiple labels for better organization
-- **Filter by Labels**: View tasks filtered by specific labels
-- **Label Management**: Edit and delete labels as needed and manage lables (e.g.,
-                     'Work', 'Persnal', 'Urgent'), to categorize and/or prioritize tasks
+- **As a user**, I want to create and manage labels (e.g., 'Work,' 'Personal,' 'Urgent'), so I can categorize and/or 
+                 prioritize my tasks.
+- **As a user**, I want to assign one or more labels to a task, so I can easily filter and organize my tasks.
 
 ### Data Persistence
-- **MongoDB Integration**: All data stored securely in MongoDB
+- **MongoDB Integration**: The application must persist all user, task, and label data in a MongoDB database.
 - **Real-time Updates**: Changes reflected immediately across the application
+
+
+## Technical Requirements & File Structure
+   Need to adhere to the following technical and structural guidelines
+
+## Database: MongoDB
+   The project should leverage a MongoDB database filled with appropriately modeled documents & collections. Reference this document on the MongoDB guidelines for embeding vs referencing information in a document:
+    guideline_image.png
 
 ## Technology Stack
 
