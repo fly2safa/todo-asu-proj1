@@ -63,9 +63,17 @@ The API will be available at:
 - `POST /api/auth/logout` - Logout and revoke refresh token
 - `GET /api/auth/me` - Get current authenticated user information (protected)
 
+### Stage 3: Task Management Endpoints
+
+- `POST /api/tasks` - Create a new task (protected)
+- `GET /api/tasks` - Get all user's tasks with filtering/sorting (protected)
+- `GET /api/tasks/{task_id}` - Get a specific task (protected)
+- `PUT /api/tasks/{task_id}` - Update a task (protected)
+- `PATCH /api/tasks/{task_id}/complete` - Toggle task completion (protected)
+- `DELETE /api/tasks/{task_id}` - Delete a task (protected)
+
 ### Coming Soon
 
-- Stage 3: Task management endpoints (`/api/tasks/*`)
 - Stage 4: Label management endpoints (`/api/labels/*`)
 
 ## Project Structure
@@ -116,7 +124,7 @@ Use the interactive documentation at `/docs` to test endpoints:
 - [x] Startup/shutdown lifecycle management
 - [x] Tested and committed
 
-## Stage 2 Completion Checklist
+## Stage 2 Completion ✅
 
 - [x] User model and schema created
 - [x] Token model for refresh tokens
@@ -127,7 +135,18 @@ Use the interactive documentation at `/docs` to test endpoints:
 - [x] Token refresh endpoint
 - [x] Logout endpoint
 - [x] Protected route for user info
-- [ ] Test all authentication endpoints
-- [ ] Verify token-based authentication
-- [ ] Ready to commit Stage 2
+- [x] Tested and committed
+
+## Stage 3 Completion Checklist
+
+- [x] Task model and schema created
+- [x] Priority enum (High, Medium, Low)
+- [x] Task CRUD endpoints
+- [x] Filtering by priority, completion, labels, overdue
+- [x] Sorting by various fields
+- [x] Overdue detection
+- [x] Task ownership verification
+- [ ] Test all task endpoints
+- [ ] Verify filtering and sorting
+- [ ] Ready to commit Stage 3
 
