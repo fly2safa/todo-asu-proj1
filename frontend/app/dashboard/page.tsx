@@ -6,7 +6,8 @@ import { taskService } from "@/lib/tasks";
 import { labelService } from "@/lib/labels";
 import TaskList from "@/components/TaskList";
 import TaskFormModal from "@/components/TaskFormModal";
-import { Plus, AlertCircle } from "lucide-react";
+import LabelManager from "@/components/LabelManager";
+import { Plus, AlertCircle, Tag } from "lucide-react";
 
 export default function DashboardPage() {
   const [tasks, setTasks] = useState<Task[]>([]);
@@ -15,6 +16,7 @@ export default function DashboardPage() {
   const [error, setError] = useState("");
   const [showTaskModal, setShowTaskModal] = useState(false);
   const [editingTask, setEditingTask] = useState<Task | undefined>();
+  const [showLabelManager, setShowLabelManager] = useState(false);
 
   useEffect(() => {
     loadData();
@@ -83,16 +85,25 @@ export default function DashboardPage() {
             Manage your tasks and stay organized
           </p>
         </div>
-        <button
-          onClick={() => {
-            setEditingTask(undefined);
-            setShowTaskModal(true);
-          }}
-          className="btn-primary flex items-center gap-2"
-        >
-          <Plus className="w-4 h-4" />
-          New Task
-        </button>
+        <div className="flex gap-2">
+          <button
+            onClick={() => setShowLabelManager(true)}
+            className="btn-secondary flex items-center gap-2"
+          >
+            <Tag className="w-4 h-4" />
+            Manage Labels
+          </button>
+          <button
+            onClick={() => {
+              setEditingTask(undefined);
+              setShowTaskModal(true);
+            }}
+            className="btn-primary flex items-center gap-2"
+          >
+            <Plus className="w-4 h-4" />
+            New Task
+          </button>
+        </div>
       </div>
 
       {/* Error Message */}
@@ -123,6 +134,15 @@ export default function DashboardPage() {
             setEditingTask(undefined);
           }}
           onSuccess={handleTaskCreated}
+        />
+      )}
+
+      {/* Label Manager Modal */}
+      {showLabelManager && (
+        <LabelManager
+          isOpen={showLabelManager}
+          onClose={() => setShowLabelManager(false)}
+          onLabelsUpdated={loadData}
         />
       )}
     </div>
