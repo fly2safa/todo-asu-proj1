@@ -2,14 +2,17 @@
 
 import { Task, Label, Priority } from "@/types";
 import { format } from "date-fns";
-import { Calendar, AlertCircle, CheckCircle2 } from "lucide-react";
+import { Calendar, AlertCircle, CheckCircle2, Edit2, Trash2 } from "lucide-react";
 
 interface TaskCardProps {
   task: Task;
   labels: Label[];
+  onEdit: () => void;
+  onDelete: () => void;
+  onToggle: () => void;
 }
 
-export default function TaskCard({ task, labels }: TaskCardProps) {
+export default function TaskCard({ task, labels, onEdit, onDelete, onToggle }: TaskCardProps) {
   const taskLabels = labels.filter((label) =>
     task.label_ids.includes(label.id)
   );
@@ -28,13 +31,17 @@ export default function TaskCard({ task, labels }: TaskCardProps) {
     >
       <div className="flex items-start gap-3">
         {/* Checkbox */}
-        <div className="mt-1 flex-shrink-0">
+        <button
+          onClick={onToggle}
+          className="mt-1 flex-shrink-0"
+          aria-label={task.completed ? "Mark incomplete" : "Mark complete"}
+        >
           {task.completed ? (
             <CheckCircle2 className="w-6 h-6 text-green-600" />
           ) : (
-            <div className="w-6 h-6 border-2 border-gray-300 rounded-full" />
+            <div className="w-6 h-6 border-2 border-gray-300 rounded-full hover:border-blue-500 transition-colors" />
           )}
-        </div>
+        </button>
 
         {/* Content */}
         <div className="flex-1 min-w-0">
@@ -54,6 +61,24 @@ export default function TaskCard({ task, labels }: TaskCardProps) {
                   {task.description}
                 </p>
               )}
+            </div>
+
+            {/* Actions */}
+            <div className="flex gap-2">
+              <button
+                onClick={onEdit}
+                className="p-1.5 text-gray-600 hover:text-blue-600 hover:bg-blue-50 rounded transition-colors"
+                aria-label="Edit task"
+              >
+                <Edit2 className="w-4 h-4" />
+              </button>
+              <button
+                onClick={onDelete}
+                className="p-1.5 text-gray-600 hover:text-red-600 hover:bg-red-50 rounded transition-colors"
+                aria-label="Delete task"
+              >
+                <Trash2 className="w-4 h-4" />
+              </button>
             </div>
           </div>
 

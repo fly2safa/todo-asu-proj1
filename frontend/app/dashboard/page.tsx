@@ -5,13 +5,16 @@ import { Task, Label } from "@/types";
 import { taskService } from "@/lib/tasks";
 import { labelService } from "@/lib/labels";
 import TaskList from "@/components/TaskList";
-import { AlertCircle } from "lucide-react";
+import TaskFormModal from "@/components/TaskFormModal";
+import { Plus, AlertCircle } from "lucide-react";
 
 export default function DashboardPage() {
   const [tasks, setTasks] = useState<Task[]>([]);
   const [labels, setLabels] = useState<Label[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
+  const [showTaskModal, setShowTaskModal] = useState(false);
+  const [editingTask, setEditingTask] = useState<Task | undefined>();
 
   useEffect(() => {
     loadData();
@@ -35,6 +38,41 @@ export default function DashboardPage() {
     }
   };
 
+  const handleTaskCreated = () => {
+    setShowTaskModal(false);
+    setEditingTask(undefined);
+    loadData();
+  };
+
+  const handleTaskEdit = (task: Task) => {
+    setEditingTask(task);
+    setShowTaskModal(true);
+  };
+
+  const handleTaskDelete = async (taskId: string) => {
+    if (!confirm("Are you sure you want to delete this task?")) {
+      return;
+    }
+
+    try {
+      await taskService.deleteTask(taskId);
+      loadData();
+    } catch (err) {
+      const error = err as { response?: { data?: { detail?: string } } };
+      setError(error.response?.data?.detail || "Failed to delete task");
+    }
+  };
+
+  const handleTaskToggle = async (taskId: string) => {
+    try {
+      await taskService.toggleComplete(taskId);
+      loadData();
+    } catch (err) {
+      const error = err as { response?: { data?: { detail?: string } } };
+      setError(error.response?.data?.detail || "Failed to update task");
+    }
+  };
+
   return (
     <div className="space-y-6">
       {/* Header */}
@@ -45,6 +83,16 @@ export default function DashboardPage() {
             Manage your tasks and stay organized
           </p>
         </div>
+        <button
+          onClick={() => {
+            setEditingTask(undefined);
+            setShowTaskModal(true);
+          }}
+          className="btn-primary flex items-center gap-2"
+        >
+          <Plus className="w-4 h-4" />
+          New Task
+        </button>
       </div>
 
       {/* Error Message */}
@@ -56,7 +104,27 @@ export default function DashboardPage() {
       )}
 
       {/* Task List */}
-      <TaskList tasks={tasks} labels={labels} loading={loading} />
+      <TaskList 
+        tasks={tasks} 
+        labels={labels} 
+        loading={loading}
+        onTaskEdit={handleTaskEdit}
+        onTaskDelete={handleTaskDelete}
+        onTaskToggle={handleTaskToggle}
+      />
+
+      {/* Task Form Modal */}
+      {showTaskModal && (
+        <TaskFormModal
+          task={editingTask}
+          labels={labels}
+          onClose={() => {
+            setShowTaskModal(false);
+            setEditingTask(undefined);
+          }}
+          onSuccess={handleTaskCreated}
+        />
+      )}
     </div>
   );
 }

@@ -8,9 +8,19 @@ interface TaskListProps {
   tasks: Task[];
   labels: Label[];
   loading: boolean;
+  onTaskEdit: (task: Task) => void;
+  onTaskDelete: (taskId: string) => void;
+  onTaskToggle: (taskId: string) => void;
 }
 
-export default function TaskList({ tasks, labels, loading }: TaskListProps) {
+export default function TaskList({ 
+  tasks, 
+  labels, 
+  loading, 
+  onTaskEdit, 
+  onTaskDelete, 
+  onTaskToggle 
+}: TaskListProps) {
   if (loading) {
     return (
       <div className="flex justify-center items-center py-12">
@@ -36,7 +46,14 @@ export default function TaskList({ tasks, labels, loading }: TaskListProps) {
   return (
     <div className="space-y-3">
       {tasks.map((task) => (
-        <TaskCard key={task.id} task={task} labels={labels} />
+        <TaskCard 
+          key={task.id} 
+          task={task} 
+          labels={labels}
+          onEdit={() => onTaskEdit(task)}
+          onDelete={() => onTaskDelete(task.id)}
+          onToggle={() => onTaskToggle(task.id)}
+        />
       ))}
     </div>
   );
