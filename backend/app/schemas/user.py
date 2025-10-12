@@ -24,6 +24,22 @@ class UserLogin(BaseModel):
     password: str
 
 
+class UserUpdate(BaseModel):
+    """Schema for updating user profile."""
+    username: Optional[str] = Field(None, min_length=3, max_length=50)
+    email: Optional[EmailStr] = None
+    current_password: Optional[str] = None
+    new_password: Optional[str] = Field(None, min_length=6, max_length=100)
+    
+    @field_validator('username')
+    @classmethod
+    def username_alphanumeric(cls, v: Optional[str]) -> Optional[str]:
+        """Validate username contains only alphanumeric characters and underscores."""
+        if v is not None and not v.replace('_', '').isalnum():
+            raise ValueError('Username must contain only alphanumeric characters and underscores')
+        return v
+
+
 class UserResponse(BaseModel):
     """Schema for user response (without password)."""
     id: str

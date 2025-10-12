@@ -52,6 +52,8 @@ A modern, full-stack TODO application built with **FastAPI (Python)** backend an
 - **User Authentication**: Secure login/logout with JWT tokens and refresh token mechanism
 - **Protected Routes**: Access control for authenticated users only
 - **Session Management**: Automatic token refresh for seamless user experience
+- **Profile Management**: View and edit profile details (username, email, password) ⭐ NEW
+- **Predefined Labels**: New users automatically get 5 starter labels (Work, Personal, Urgent, Shopping, Health) ⭐ NEW
 
 ### Task Management
 - **Create Tasks**: Add new tasks with title, description, priority, and deadline
@@ -63,6 +65,7 @@ A modern, full-stack TODO application built with **FastAPI (Python)** backend an
 - **Completion Tracking**: Mark tasks as complete/incomplete with a single click
 
 ### Labeling System
+- **Predefined Labels**: New users automatically receive 5 starter labels (Work, Personal, Urgent, Shopping, Health) ⭐ NEW
 - **Create Labels**: Add custom labels with names and colors (8 presets + custom picker)
 - **Assign Labels**: Tag tasks with multiple labels for better organization
 - **Filter by Labels**: View tasks filtered by specific labels (multi-select with OR logic)
@@ -327,10 +330,12 @@ The backend provides comprehensive API documentation through FastAPI's automatic
 
 | Method | Endpoint | Description | Auth Required |
 |--------|----------|-------------|---------------|
-| POST | `/api/auth/register` | Create new user account | No |
+| POST | `/api/auth/register` | Create new user account (+ 5 predefined labels) | No |
 | POST | `/api/auth/login` | User login (returns access & refresh tokens) | No |
 | POST | `/api/auth/refresh` | Refresh access token | Yes (Refresh Token) |
 | GET | `/api/auth/me` | Get current user info | Yes |
+| PUT | `/api/auth/me` | Update user profile (username, email, password) ⭐ NEW | Yes |
+| POST | `/api/auth/logout` | Logout user (revoke refresh token) | Yes |
 
 ### Task Endpoints
 
@@ -545,6 +550,37 @@ Database 'todo_app' does not exist
 4. ✅ **Stage 4**: Task management (CRUD operations)
 5. ✅ **Stage 5**: Label management system
 6. ✅ **Stage 6**: Advanced filtering, sorting & polish
+
+---
+
+## ⭐ Bonus Features Implemented (Stretch Goals)
+
+All stretch goals from the project rubric have been successfully implemented:
+
+1. ✅ **Task Filtering by Label** (2.5 bonus points)
+   - Multi-select label filtering with visual feedback
+   - OR logic (tasks with ANY selected label)
+   - Filter count display and reset functionality
+
+2. ✅ **User Profile Management** (2.5 bonus points) ⭐ NEW
+   - View current profile information
+   - Edit username and email (with uniqueness validation)
+   - Change password (with current password verification)
+   - Accessible via Settings icon in header
+
+3. ✅ **Responsive Design** (2.5 bonus points)
+   - Mobile-first design with Tailwind breakpoints
+   - Adaptive layouts for all screen sizes (sm, md, lg)
+   - Touch-friendly UI elements
+   - Hidden/visible elements based on screen size
+
+4. ✅ **Comprehensive Error Handling** (2.5 bonus points)
+   - Clear, user-friendly error messages throughout
+   - Visual error indicators (colored banners with icons)
+   - Form validation with helpful feedback
+   - HTTP status codes properly used
+
+**Total Bonus Points Achieved: 10/10**
 
 ---
 

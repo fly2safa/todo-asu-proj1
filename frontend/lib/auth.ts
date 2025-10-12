@@ -36,6 +36,16 @@ export const authService = {
     return response.data;
   },
 
+  async updateProfile(data: {
+    username?: string;
+    email?: string;
+    current_password?: string;
+    new_password?: string;
+  }): Promise<User> {
+    const response = await api.put<User>("/api/auth/me", data);
+    return response.data;
+  },
+
   isAuthenticated(): boolean {
     return !!Cookies.get("access_token");
   },
