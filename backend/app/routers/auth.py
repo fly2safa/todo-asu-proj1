@@ -1,5 +1,6 @@
 from datetime import datetime, timedelta
-from fastapi import APIRouter, Depends, HTTPException, status
+from typing import Optional
+from fastapi import APIRouter, Body, Depends, HTTPException, status
 from fastapi.security import OAuth2PasswordRequestForm
 from bson import ObjectId
 from pymongo.errors import DuplicateKeyError, PyMongoError
@@ -91,7 +92,7 @@ async def register(user_data: UserCreate):
 
 @router.post("/login", response_model=Token)
 async def login(user_data: UserLogin):
-    """Login user and return access and refresh tokens."""
+    """Login user and return access and refresh tokens (JSON format for frontend)."""
     db = get_db()
     users_collection = db[UserModel.get_collection_name()]
     
@@ -99,6 +100,42 @@ async def login(user_data: UserLogin):
     user = users_collection.find_one({"email": user_data.email})
     
     if not user or not verify_password(user_data.password, user["hashed_password"]):
+        raise HTTPException(
+            status_code=status.HTTP_401_UNAUTHORIZED,
+            detail="Incorrect email or password",
+            headers={"WWW-Authenticate": "Bearer"},
+        )
+    
+    # Create access and refresh tokens
+    user_id = str(user["_id"])
+    access_token = create_access_token(data={"sub": user_id, "email": user["email"]})
+    refresh_token = create_refresh_token(data={"sub": user_id, "email": user["email"]})
+    
+    # Store refresh token in database
+    tokens_collection = db[TokenModel.get_collection_name()]
+    refresh_token_doc = TokenModel.create_refresh_token(
+        user_id=user_id,
+        token=refresh_token,
+        expires_at=datetime.utcnow() + timedelta(days=settings.REFRESH_TOKEN_EXPIRE_DAYS)
+    )
+    tokens_collection.insert_one(refresh_token_doc)
+    
+    return Token(access_token=access_token, refresh_token=refresh_token)
+
+
+@router.post("/token", response_model=Token)
+async def login_oauth2(form_data: OAuth2PasswordRequestForm = Depends()):
+    """OAuth2 compatible login endpoint for Swagger UI authorization.
+    
+    Note: username field accepts email address.
+    """
+    db = get_db()
+    users_collection = db[UserModel.get_collection_name()]
+    
+    # Find user by email (username field contains email in OAuth2 form)
+    user = users_collection.find_one({"email": form_data.username})
+    
+    if not user or not verify_password(form_data.password, user["hashed_password"]):
         raise HTTPException(
             status_code=status.HTTP_401_UNAUTHORIZED,
             detail="Incorrect email or password",
