@@ -75,13 +75,13 @@ Remove-Item -Recurse -Force .next  # Windows PowerShell
 # Terminal 1 - From backend directory
 cd backend
 venv\Scripts\activate
-uvicorn app.main:app --reload --host 0.0.0.0 --port 8000
+uvicorn app.main:app --reload --host 127.0.0.1 --port 8000
 ```
 
 **Expected Output:**
 ```
 INFO:     Will watch for changes in these directories: ['C:\\...\\backend']
-INFO:     Uvicorn running on http://0.0.0.0:8000 (Press CTRL+C to quit)
+INFO:     Uvicorn running on http://127.0.0.1:8000 (Press CTRL+C to quit)
 INFO:     Started reloader process
 INFO:     Started server process
 INFO:     Waiting for application startup.
