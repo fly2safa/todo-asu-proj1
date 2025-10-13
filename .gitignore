@@ -1,10 +1,13 @@
 # In todo-asu-proj1/.gitignore
 
+.cursorignore
+
 # Chat logs and sensitive information
 .chat_history.md
 .chat_history_frontend.md
 .chat_history_for_cursor_todo_rubric_review.md
 .chat_history_review_with_AI_agent.md
+.chat_history_for_cursor_todo_rubric_review.md
 chat_log.md
 .cursor_chat.md
 *.chat.md
